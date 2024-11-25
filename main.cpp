@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -47,18 +48,18 @@ int main()
     }
     for (auto& prob : p)
     {
-        bool assigned = false;
-        for (auto& doc : d)
-        {
-            if (doc.available && doc.speciality == prob.speciality)
+        auto it = find_if(d.begin(), d.end(), [&prob](const doctor& doc)
             {
-                cout << doc.id << " " << prob.id << '\n';
-                doc.available = false;
-                assigned = true;
-                break;
+                if (doc.speciality == prob.speciality and doc.available == true)
+                    return true;
+                else return false;
+            });
+            if (it != d.end())
+            {
+                (*it).available = false;
+                cout << (*it).id << ' ' << prob.id << '\n';
 
             }
-        }
     }
     return 0;
 }
