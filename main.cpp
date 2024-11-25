@@ -10,61 +10,55 @@ struct problem
     string id;
     string speciality;
 };
-
 struct doctor
 {
     string id;
     string speciality;
+    bool available;
 };
+
 int main()
 {
     ifstream inFile("input.txt");
 
     int no_problems, no_doctors;
-    
-    inFile >> no_problems;
     string name, speciality;
-    std::vector<problem> problems;
+
+    inFile >> no_problems;
+    vector<problem> p;
+
     for (int i = 0; i < no_problems; i++)
     {
         problem n;
         inFile >> n.id;
         inFile >> n.speciality;
-        problems.push_back(n);
-      
+        p.push_back(n);
     }
 
     inFile >> no_doctors;
-
-    std::vector<doctor> doctors;
-
+    vector<doctor> d;
     for (int i = 0; i < no_doctors; i++)
     {
-        doctor doc;
-
-        inFile >> doc.id;
-        inFile >> doc.speciality;
-        
-        doctors.push_back(doc);
+        doctor x;
+        inFile >> x.id;
+        inFile >> x.speciality;
+        x.available = true;
+        d.push_back(x);
     }
-    for (auto problem: problems)
+    for (auto& prob : p)
     {
-        bool found = 0;
-        for (auto doctor: doctors)
+        bool assigned = false;
+        for (auto& doc : d)
         {
-            if (problem.speciality == doctor.speciality)
+            if (doc.available && doc.speciality == prob.speciality)
             {
-                found = 1;
+                cout << doc.id << " " << prob.id << '\n';
+                doc.available = false;
+                assigned = true;
                 break;
-            }
-            
-        }
-        if (found == 0)
-            cout << problem.id << " " << "Repsins" << endl;
-        else
-            cout << problem.id << " " << "Acceptat"<< endl;
 
+            }
+        }
     }
-    
     return 0;
 }
