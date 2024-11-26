@@ -3,16 +3,24 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <queue>
 
 using namespace std;
 
 struct problem
 {
+    bool operator <(const problem& p1)const 
+    {
+        return p1.prioritate < prioritate;
+    }
     string id;
     string speciality;
+    int durata;
+    int prioritate;
 };
 struct doctor
 {
+    int timp = 8;
     string id;
     string speciality;
     bool available = true;
@@ -26,18 +34,20 @@ int main()
     string name, speciality;
 
     inFile >> no_problems;
-    vector<problem> p;
-
+    priority_queue<problem> pq;
     for (int i = 0; i < no_problems; i++)
     {
         problem n;
         inFile >> n.id;
         inFile >> n.speciality;
-        p.push_back(n);
+        inFile >> n.durata;
+        inFile >> n.prioritate;
+        pq.push(n);
     }
 
     inFile >> no_doctors;
     vector<doctor> d;
+   
     for (int i = 0; i < no_doctors; i++)
     {
         doctor x;
@@ -46,7 +56,7 @@ int main()
         x.available = true;
         d.push_back(x);
     }
-    for (auto& prob : p)
+    /*for (auto& prob : p)
     {
         auto it = find_if(d.begin(), d.end(), [&prob](const doctor& doc)
             {
@@ -60,6 +70,11 @@ int main()
                 cout << (*it).id << ' ' << prob.id << '\n';
 
             }
+    }*/
+    while (pq.size() != 0)
+    {
+        pq.top();
+        pq.pop();
     }
     return 0;
 }
