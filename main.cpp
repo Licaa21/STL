@@ -15,7 +15,7 @@ struct doctor
 {
     string id;
     string speciality;
-    bool available;
+    bool available = true;
 };
 
 int main()
