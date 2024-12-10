@@ -9,13 +9,13 @@ using namespace std;
 
 struct problem
 {
-    
+
     string id;
     string speciality;
     int orasosire;
     int durata;
     int prioritate;
-    bool operator <(const problem& p1)const 
+    bool operator <(const problem& p1)const
     {
         return p1.prioritate > prioritate;
     }
@@ -52,7 +52,7 @@ int main()
 
     inFile >> no_doctors;
     vector<doctor> d;
-   
+
     for (int i = 0; i < no_doctors; i++)
     {
         doctor doc;
