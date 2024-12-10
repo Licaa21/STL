@@ -9,21 +9,23 @@ using namespace std;
 
 struct problem
 {
-    bool operator <(const problem& p1)const 
-    {
-        return p1.prioritate < prioritate;
-    }
+    
     string id;
     string speciality;
     int durata;
     int prioritate;
+    bool operator <(const problem& p1)const 
+    {
+        return p1.prioritate > prioritate;
+    }
 };
 struct doctor
 {
-    int timp = 8;
+    int timp;
     string id;
     string speciality;
-    bool available = true;
+    int probrez;
+    vector<string> nrprob;
 };
 
 int main()
@@ -50,31 +52,39 @@ int main()
    
     for (int i = 0; i < no_doctors; i++)
     {
-        doctor x;
-        inFile >> x.id;
-        inFile >> x.speciality;
-        x.available = true;
-        d.push_back(x);
-    }
-    /*for (auto& prob : p)
-    {
-        auto it = find_if(d.begin(), d.end(), [&prob](const doctor& doc)
-            {
-                if (doc.speciality == prob.speciality and doc.available == true)
-                    return true;
-                else return false;
-            });
-            if (it != d.end())
-            {
-                (*it).available = false;
-                cout << (*it).id << ' ' << prob.id << '\n';
+        doctor doc;
+        inFile >> doc.id;
+        inFile >> doc.speciality;
+        doc.probrez = 0;
+        doc.timp = 8;
+        d.push_back(doc);
 
-            }
-    }*/
-    while (pq.size() != 0)
-    {
-        pq.top();
-        pq.pop();
     }
-    return 0;
+    while (!pq.empty())
+    {
+        problem curent = pq.top();
+        pq.pop();
+        auto it = find_if(d.begin(), d.end(), [&curent](const doctor& doc) {
+        return doc.speciality == curent.speciality;
+        });
+        if ((it != d.end()) && (it->timp >= curent.durata))
+        {
+            it->probrez++;
+            it->timp -= curent.durata;
+            it->nrprob.push_back(curent.id);
+            
+        }
+    }
+    for (const auto& doc : d)
+    {
+        if (!doc.nrprob.empty())
+        {
+            cout << doc.id << ' ' << doc.probrez;
+            for (const auto& problem_id : doc.nrprob)
+            {
+                cout << ' ' << problem_id;
+            }
+            cout << '\n';
+        }
+    }
 }
